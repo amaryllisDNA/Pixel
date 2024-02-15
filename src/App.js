@@ -5,24 +5,25 @@ import { Component } from 'react';
 class Pixel extends Component{
   constructor(props){
     super(props);
-    this.state = { 
-      border : "0.5px solid rgb(237, 231, 231)"
-    }}
+    }
 
     selectPixel = () => {
       console.log('you selected pixel ' + this.props.col + ', ' + this.props.lin, this.props.clr);
-      this.setState({ border: '2px solid black' });
+      this.setState({ border: '2.5px solid black' });
       this.props.onSelectPixel(this.props.col, this.props.lin);
     };
   
 
     
   render() {
+    const { clr, isSelected } = this.props;
+    const borderStyle = isSelected ? '2px solid black' : '1px solid rgb(237, 231, 231)';
+
     return (
       <div
         className="pixel"
         onClick={this.selectPixel}
-        style={{ backgroundColor: this.props.clr, border: this.state.border }}
+        style={{ backgroundColor: this.props.clr, border: borderStyle }}
       ></div>
     );
   }
@@ -34,7 +35,9 @@ class Canva extends Component {
     super(props); 
     this.state = {
       table : Array.from({ length: 100  }, (_, rowIndex) => Array.from({ length: 100 }, (_, subArrayIndex) => [rowIndex, subArrayIndex])),
-      edited : this.props.edited
+      edited : this.props.edited,
+      selecting : false, 
+      
     }
   }
 
@@ -61,7 +64,8 @@ class Canva extends Component {
           {row.map(([col, lin, clr], subArrayIndex) => (
             <Pixel key={`${rowIndex}-${subArrayIndex}`} 
                   col={col} lin={lin} clr= {clr}
-                  onSelectPixel={onSelectPixel}  />
+                  onSelectPixel={onSelectPixel} 
+                  isSelected ={this.props.selectedPixel && this.props.selectedPixel[0]===col && this.props.selectedPixel[1]===lin}  />
           ))}
 
 
@@ -90,7 +94,8 @@ class Gameboard extends Component {
       this.setState({ 
         submitted: pixelchosen.concat(colorchosen),
         pixelchosen: undefined,
-        colorchosen: undefined
+        colorchosen: undefined,
+        previousSelect: null
    }, () => {
       console.log(this.state.submitted);
         console.log("You changed the color of the pixel ", this.state.submitted[0], ",", this.state.submitted[1], "!");
@@ -102,7 +107,15 @@ class Gameboard extends Component {
   };
 
   handleSelectPixel = (col, line) => {
-    this.setState({ pixelchosen: [col, line] });
+    if(this.state.pixelchosen != undefined){
+      this.setState({previousSelect : this.state.pixelchosen, pixelchosen: [col, line]}, ()=>{
+        console.log("you already selected a pixel ! ", this.state.previousSelect, this.state.pixelchosen)});
+      this.setState({  });
+      
+    } else {
+      this.setState({ pixelchosen: [col, line] });
+    }
+    
   };
 
   handleSelectColor = (color) => {
@@ -114,7 +127,7 @@ class Gameboard extends Component {
     return(
       <div className='game'>
       
-        <Canva onSelectPixel={this.handleSelectPixel} submitted = {this.state.submitted} />
+        <Canva onSelectPixel={this.handleSelectPixel} selectedPixel = {this.state.pixelchosen} submitted = {this.state.submitted} />
         <div id="colorpalette">
           <div className="coloring" onClick={() => this.handleSelectColor("#FFFFFF")} style={{ backgroundColor: '#FFFFFF' }}></div>
           <div className="coloring" onClick={() => this.handleSelectColor("#000000")} style={{ backgroundColor: '#000000' }}></div>
