@@ -1,0 +1,58 @@
+.App {
+  text-align: center;
+}
+
+#title{
+  font-size: 170%;
+  font-weight: 800;
+  text-align: center;
+}
+
+.pixel{
+  width: 5px;
+  height: 5px;
+  cursor: pointer;
+}
+
+.pixel:hover{
+  background-color: rgb(232, 226, 226);
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+
+}
+
+.canva{
+  margin : auto;
+}
+
+.game{
+  display : flex;
+  flex-direction: column ;
+  justify-items: center;
+  justify-content: center;
+}
+
+.coloring {
+  width : 8px;
+  height : 8px;
+  border : 0.5px solid rgb(46, 41, 41);
+  margin : 5px;
+  cursor : pointer;
+}
+
+#colorpalette{
+  display: flex;
+  flex-direction: row;
+  align-self: center;
+  margin : 10px;
+}
+
+button{
+  width : 70px;
+  align-self: center;
+  cursor : pointer;
+}
+
