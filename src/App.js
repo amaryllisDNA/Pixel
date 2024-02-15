@@ -9,7 +9,6 @@ class Pixel extends Component{
 
     selectPixel = () => {
       console.log('you selected pixel ' + this.props.col + ', ' + this.props.lin, this.props.clr);
-      this.setState({ border: '2.5px solid black' });
       this.props.onSelectPixel(this.props.col, this.props.lin);
     };
   
